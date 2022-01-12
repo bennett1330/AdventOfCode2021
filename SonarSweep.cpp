@@ -6,24 +6,24 @@
 #define     WRITE_P1_FILE           1
 #define     WRITE_P2_FILE           2
 
-#define     WRITE_OUTPUT_FILES      0
+#define     WRITE_OUTPUT_FILES      WRITE_P1_FILE + WRITE_P2_FILE
 
 #define     WINDOW_SIZE             3
 
 int main()
 {
     std::cout << "SONAR SWEEP" << std::endl;
+    std::string file_prefix = "SonarSweep";
 
-    const char input_file_name[] = "SonarSweep_input.txt";
-    std::ifstream input_file = std::ifstream(input_file_name);
-
+    std::string input_file_name = file_prefix + "_input.txt";
+    std::ifstream input_file = std::ifstream(input_file_name.c_str());
 #if (WRITE_OUTPUT_FILES & WRITE_P1_FILE) == WRITE_P1_FILE
-    std::ofstream p1_output_file = std::ofstream("SonarSweepP1_output.txt");
-    char *p1_output_info_str[35];
+    std::ofstream p1_output_file = std::ofstream((file_prefix + "P1_output.txt").c_str());
+    std::string p1_output_info_str;
 #endif
 #if (WRITE_OUTPUT_FILES & WRITE_P2_FILE) == WRITE_P2_FILE
-    std::ofstream p2_output_file = std::ofstream("SonarSweepP2_output.txt");
-    char *p2_output_info_str[35];
+    std::ofstream p2_output_file = std::ofstream((file_prefix + "P2_output.txt").c_str());
+    std::string p2_output_info_str;
 #endif
 
     uint16_t total_positive_deltas = 0;
@@ -52,17 +52,17 @@ int main()
 #if (WRITE_OUTPUT_FILES & WRITE_P1_FILE) == WRITE_P1_FILE
         if (line_number == 1)
         {
-            *p1_output_info_str = "(N/A - no previous measurement)\0";
+            p1_output_info_str = "(N/A - no previous measurement)";
         }
         else if (delta_value > 0)
         {
-            *p1_output_info_str = "(increased)\0";   
+            p1_output_info_str = "(increased)";   
         }
         else
         {
-            *p1_output_info_str = "(decreased)\0";
+            p1_output_info_str = "(decreased)";
         }
-        p1_output_file << curr_input_value << "\t" << *p1_output_info_str << std::endl;
+        p1_output_file << curr_input_value << "\t" << p1_output_info_str << std::endl;
 #endif
 
         for (uint8_t i = 0; i < WINDOW_SIZE; i++)
@@ -85,17 +85,17 @@ int main()
 #if (WRITE_OUTPUT_FILES & WRITE_P2_FILE) == WRITE_P2_FILE
             if (line_number == WINDOW_SIZE)
             {
-                *p2_output_info_str = "(N/A - no previous sums)\0";
+                p2_output_info_str = "(N/A - no previous sums)";
             }
             else if (delta_window_value > 0)
             {
-                *p2_output_info_str = "(increased)\0";   
+                p2_output_info_str = "(increased)";   
             }
             else
             {
-                *p2_output_info_str = "(decreased)\0";
+                p2_output_info_str = "(decreased)";
             }
-            p2_output_file << curr_window_value << "\t" << *p2_output_info_str << std::endl;
+            p2_output_file << curr_window_value << "\t" << p2_output_info_str << std::endl;
 #endif
         }
         sums[ready_clear_sum_index] = 0;

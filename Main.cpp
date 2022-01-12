@@ -33,6 +33,9 @@ int main()
                 case 1:
                     system("SonarSweep.exe");
                     break;
+                case 2:
+                    system("Dive.exe");
+                    break;
                 default:
                     printf("Not yet implemented.\r\n");
                     break;
