@@ -1,0 +1,11 @@
+# generated build files
+*.exe
+*.ilk
+*.pdb
+*.obj
+
+# vs code build files
+*.json
+
+# generated output files
+*output*.txt
